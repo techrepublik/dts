@@ -11,8 +11,8 @@ class Agency(models.Model):
     agency_logo2 = models.ImageField(upload_to='static/dist/img/img_user',blank=True,null=True)
     created_at = models.DateTimeField()
 
-    def __str__(self) -> str:
-        return self.agency_name
+    # def __str__(self) -> str:
+    #     return self.agency_name
     
 class Office(models.Model):
     office_name = models.CharField(max_length=50)
