@@ -11,9 +11,9 @@ class Agency(models.Model):
     agency_contact = models.CharField(max_length=50)
     agency_email = models.CharField(max_length=50)
     agency_website = models.CharField(max_length=50)
-    agency_logo1 = models.ImageField(upload_to='static/dist/img/agency_logo',blank=True,null=True)
-    agency_logo2 = models.ImageField(upload_to='static/dist/img/agency_logo',blank=True,null=True)
-    created_at = models.DateTimeField()
+    agency_logo1 = models.ImageField(upload_to='static/dist/img/logo',blank=True,null=True)
+    agency_logo2 = models.ImageField(upload_to='static/dist/img/logo',blank=True,null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.agency_name
@@ -36,6 +36,7 @@ class User(AbstractUser, PermissionsMixin):
     middle_name = models.CharField(max_length=20, blank=True)
     is_staff = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
+    is_superuser = models.BooleanField(default=False)
     office_user = models.BooleanField(default=False)
 
     
@@ -79,8 +80,11 @@ class Office_User_Profile(models.Model):
     office = models.ForeignKey(Office, related_name='user_office_name', on_delete = models.CASCADE, blank=True,null=True)
     department = models.CharField(max_length = 50, blank = True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    picture = models.ImageField(upload_to='static/dist/img/user',blank=True,null=True)
 
-    
+    def __str__(self):
+        template = '{0.user}'
+        return template.format(self)    
     
     
 

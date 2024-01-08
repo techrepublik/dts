@@ -41,23 +41,122 @@
     {% endif %}
 
     {% if request.user.is_superuser %}
-      <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-        <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
-          <i class="nav-icon fas fa-tachometer-alt"></i>
-          <p>
-            Dashboard
-            <i class="right fas fa-angle-left"></i>
-          </p>
-        </a>
-        <ul class="nav nav-treeview">
-          <li class="nav-item">
-            <a href="{% url 'admin:index' %}" class="nav-link {% if 'index' in segment %} active {% endif %}">
-              <i class="far fa-circle nav-icon"></i>
-              <p>Dashboard v1</p>
-            </a>
-          </li>
-        </ul>
-      </li>
+    <li class="nav-header">Account</li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Logout
+        </p>
+      </a>
+    </li>
+    {% endif %}
+
+    {% if not request.user.is_superuser and not request.user.office_user and request.user.is_authenticated %}
+    <li class="nav-header">User Info</li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "officeUser-index" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Agencies
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Officies
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Department
+        </p>
+      </a>
+    </li>
+    <li class="nav-header">Tracking Info</li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Category
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Attachment
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Status
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Workflow
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Flow
+        </p>
+      </a>
+    </li>
+    <li class="nav-header">Account</li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Logout
+        </p>
+      </a>
+    </li>
+    {% endif %}
+
+    {% if request.user.office_user %}
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "officeUser-index" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Submit New
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Incoming
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Forwarded
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Recieved
+        </p>
+      </a>
+    </li>
+    <li class="nav-header">Account</li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "login" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Logout
+        </p>
+      </a>
+    </li>
     {% endif %}
     
     <li class="nav-item">

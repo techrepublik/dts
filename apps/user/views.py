@@ -1,19 +1,15 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .forms import LoginForm, SignUpForm
+from .forms import LoginForm, SignUpForm,AdminSignUpForm
 from django.contrib.auth import authenticate, login
-from .models import Office_User
+from .models import Office_User, Office_User_Profile
 
 # Create your views here.
 
-def index(request):
-
-    # Page from the theme 
-    return render(request, 'index.html')
 
 def office_user_index(request,):
     # Page from the theme 
-    return render(request, 'officeUser_index.html')
+    return render(request, 'index.html')
 
 def login_view(request):
     form = LoginForm(request.POST or None)
@@ -26,6 +22,9 @@ def login_view(request):
             if user is not None and user.is_superuser:
                 login(request, user)
                 return redirect('/admin')
+            elif user is not None and user.is_staff and not user.is_superuser and not user.office_user:
+                login(request, user)
+                return redirect('agency-list')
             elif user is not None and user.office_user:
                 login(request, user)
                 return redirect('officeUser-index')
@@ -37,7 +36,7 @@ def login_view(request):
 
 
 
-def reg_judge(request):
+def office_user_signup(request):
     msg = None
     success = False
 
@@ -60,3 +59,36 @@ def reg_judge(request):
         form = SignUpForm()
 
     return render(request, "accounts/register.html", {"form": form, "msg": msg, "success": success})
+
+def admin_user_signup(request):
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        form = AdminSignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get("username")
+            raw_password = form.cleaned_data.get("password1")
+            user = authenticate(username=username, password=raw_password)
+
+            msg = 'User created successfully.'
+            success = True
+
+            return redirect("login")
+
+        else:
+            msg = 'Form is not valid'
+    else:
+        form = AdminSignUpForm()
+
+    return render(request, "accounts/reg_admin.html", {"form": form, "msg": msg, "success": success})
+
+def agency_list(request):
+
+    return render(request, 'admin_page/agency_list.html')
+
+def office_user_profile(request):
+    office_user = Office_User_Profile.objects.all()
+
+    return render(request, 'user/edit_profile.html',{'office_user':office_user})
