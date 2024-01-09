@@ -1,8 +1,9 @@
-from django.shortcuts import render,redirect
-from django.http import HttpResponse
-from .forms import LoginForm, SignUpForm,AdminSignUpForm
+from django.shortcuts import render,redirect, get_object_or_404
+from django.template.loader import render_to_string, get_template
+from django.http import HttpResponse, JsonResponse
+from .forms import LoginForm, SignUpForm,AdminSignUpForm, AgencyForm
 from django.contrib.auth import authenticate, login
-from .models import Office_User, Office_User_Profile
+from .models import Office_User, Office_User_Profile,Agency
 
 # Create your views here.
 
@@ -92,3 +93,65 @@ def office_user_profile(request):
     office_user = Office_User_Profile.objects.all()
 
     return render(request, 'user/edit_profile.html',{'office_user':office_user})
+
+
+#________________________________________________________________________________________________________
+
+
+                        #------------Agency Views---------------#
+
+#________________________________________________________________________________________________________
+
+
+def agencies(request):
+        agencies = Agency.objects.all()
+        return render(request, 'tracking/agency/agency.html',{'agencies':agencies})
+
+def add_agency(request):
+        if(request.method == 'POST'):
+                form = AgencyForm(request.POST)
+        else:    
+                form = AgencyForm()
+
+        return save_agency(request, form, 'tracking/agency/add-agency.html')
+
+
+def edit_agency(request,pk):
+        agency = get_object_or_404(Agency, pk=pk)
+        if(request.method == 'POST'):
+                form = AgencyForm(request.POST, instance=agency)
+        else:    
+                form = AgencyForm(instance=agency)
+        return save_agency(request, form, 'tracking/agency/edit-agency.html')
+
+
+def delete_agency(request,pk):
+        agency = get_object_or_404(Agency, pk=pk)
+        data = dict()
+        if request.method == 'POST':
+                agency.delete()
+                data['form_is_valid'] = True
+                agencies= Agency.objects.all()
+                data['agency_list'] = render_to_string('tracking/agency/agency-list.html',{'agencies':agencies})
+        else:    
+                context = {'agency':agency}
+                data['html_form'] = render_to_string('tracking/agency/delete-agency.html',
+                context,
+                request=request)
+        return JsonResponse(data)
+
+
+def save_agency(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            data['form_is_valid'] = True
+            agencies= Agency.objects.all()
+            data['agency_list'] = render_to_string('tracking/agency/agency-list.html', {'agencies':agencies})
+        else:
+            data['form_is_valid'] = False
+
+    context = {'form':form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)

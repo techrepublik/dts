@@ -6,7 +6,7 @@ from django.dispatch import receiver
 
 class Agency(models.Model):
     agency_name = models.CharField(max_length=50)
-    ageny_address = models.CharField(max_length=50)
+    agency_address = models.CharField(max_length=50)
     agency_head = models.CharField(max_length=50)
     agency_contact = models.CharField(max_length=50)
     agency_email = models.CharField(max_length=50)
@@ -28,6 +28,13 @@ class Office(models.Model):
     def __str__(self):
         template = '{0.office_name}'
         return template.format(self)
+    
+class Department(models.Model):
+    department_name = models.CharField(max_length=50)
+    created_at = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return self.department_name
 
 
 class User(AbstractUser, PermissionsMixin):
@@ -78,7 +85,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 class Office_User_Profile(models.Model):
     user = models.ForeignKey(User, related_name = 'office_user_name', on_delete = models.CASCADE)
     office = models.ForeignKey(Office, related_name='user_office_name', on_delete = models.CASCADE, blank=True,null=True)
-    department = models.CharField(max_length = 50, blank = True, null=True)
+    department = models.ForeignKey(Department, related_name = 'office_user_department', on_delete = models.CASCADE, blank = True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     picture = models.ImageField(upload_to='static/dist/img/user',blank=True,null=True)
 

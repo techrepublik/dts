@@ -1,0 +1,21 @@
+{%for a in agencies %}
+<tr>
+    <td>{{a.agency_name}}</td>
+    <td>{{a.agency_address}}</td>
+    <td>{{a.agency_head}}</td>
+    <td>{{a.agency_contact}}</td>
+    <td>{{a.agency_email}}</td>
+    <td>{{a.agency_website}}</td>
+    <td>{{a.agency_logo1}}</td>
+    <td>{{a.agency_logo2}}</td>
+    <td>{{a.created_at}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-agency" data-url="{% url "edit-agency" a.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-agency" data-url="{% url "delete-agency" a.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}

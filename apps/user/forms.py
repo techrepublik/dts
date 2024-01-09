@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from .models import Office_User,User,Office_User_Profile
+from .models import Office_User,User,Office_User_Profile, Agency
 
 
 class LoginForm(forms.Form):
@@ -136,3 +136,10 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = Office_User_Profile
         fields = ['office','department','picture']
+
+
+
+class AgencyForm(forms.ModelForm):
+    class Meta:
+        model = Agency
+        fields = ['agency_name','agency_address','agency_head', 'agency_contact','agency_email','agency_website','agency_logo1','agency_logo2',]
