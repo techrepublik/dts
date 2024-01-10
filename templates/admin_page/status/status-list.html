@@ -1,0 +1,15 @@
+{%for s in sttatus %}
+<tr>
+    <td>{{s.status_name}}</td>
+    <td>{{s.status_description}}</td>
+    <td>{{s.created_at}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-status" data-url="{% url "edit-status" s.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-status" data-url="{% url "delete-status" s.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}

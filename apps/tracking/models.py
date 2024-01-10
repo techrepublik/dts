@@ -49,7 +49,7 @@ class Attachment(models.Model):
     attachment_note = models.CharField(max_length=50)
     attachment_file = models.CharField(max_length=50)
     document_id = models.ForeignKey(Document,related_name='document_attachment',on_delete=models.CASCADE)
-    agency_id = models.ForeignKey(Agency,related_name='agency_attachment',on_delete=models.CASCADE)
+    urgency = models.ForeignKey(Agency,related_name='agency_attachment',on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:

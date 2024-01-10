@@ -1,0 +1,20 @@
+{%load crispy_forms_tags%}
+
+<form method='post' action="{%url 'add-flow'%}" class="js-flow-create-form">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h4 class="modal-title">Add Flow</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        {{form.flow_name|as_crispy_field}}
+        {{form.flow_is_active|as_crispy_field}}
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+    </div>
+</form>
+                     

@@ -1,0 +1,14 @@
+{%for f in flow %}
+<tr>
+    <td>{{f.flow_name}}</td>
+    <td>{{f.flow_is_active}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-flow" data-url="{% url "edit-flow" f.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-flow" data-url="{% url "delete-flow" f.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}
