@@ -10,7 +10,9 @@ class Agency(models.Model):
     agency_head = models.CharField(max_length=50)
     agency_contact = models.CharField(max_length=50)
     agency_email = models.CharField(max_length=50)
-    agency_website = models.CharField(max_length=50)
+    # josh Jan 10, 2024
+    agency_website = models.CharField(max_length=50, blank=True, null=True)
+    # julius Jan 10, 2024
     agency_logo1 = models.ImageField(upload_to='static/dist/img/logo',blank=True,null=True)
     agency_logo2 = models.ImageField(upload_to='static/dist/img/logo',blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
