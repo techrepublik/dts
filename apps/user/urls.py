@@ -14,6 +14,18 @@ urlpatterns = [
      #agency
     path('agencies/', views.agencies, name='agencies'),
     path('agency/add_agency/', views.add_agency, name='add-agency'),
-    path('agency/<int:pk>/update/', views.edit_agency, name='edit-agency'),
+    path('agency/<int:pk>/edit/', views.edit_agency, name='edit-agency'),
     path('agency/<int:pk>/delete/', views.delete_agency, name='delete-agency'),
+
+    #department
+    path('departments/', views.departments, name='departments'),
+    path('department/add_department/', views.add_department, name='add-department'),
+    path('department/<int:pk>/edit/', views.edit_department, name='edit-department'),
+    path('department/<int:pk>/delete/', views.delete_department, name='delete-department'),
+
+    #office
+    path('officies/', views.officies, name='officies'),
+    path('office/add_office/', views.add_office, name='add-office'),
+    path('office/<int:pk>/edit/', views.edit_office, name='edit-office'),
+    path('office/<int:pk>/delete/', views.delete_office, name='delete-office'),
 ]

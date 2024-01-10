@@ -1,0 +1,14 @@
+{%for c in categories %}
+<tr>
+    <td>{{c.category_name}}</td>
+    <td>{{c.created_at}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-category" data-url="{% url "edit-category" c.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-category" data-url="{% url "delete-category" c.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}

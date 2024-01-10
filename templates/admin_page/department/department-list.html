@@ -1,0 +1,14 @@
+{%for d in departments %}
+<tr>
+    <td>{{d.department_name}}</td>
+    <td>{{d.created_at}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-department" data-url="{% url "edit-department" d.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-department" data-url="{% url "delete-department" d.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}

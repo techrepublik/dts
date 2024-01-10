@@ -1,0 +1,18 @@
+{%for o in officies %}
+<tr>
+    <td>{{o.office_name}}</td>
+    <td>{{o.office_head}}</td>
+    <td>{{o.office_branch}}</td>
+    <td>{{o.office_description}}</td>
+    <td>{{o.agency}}</td>
+    <td>{{o.created_at}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-office" data-url="{% url "edit-office" o.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-office" data-url="{% url "delete-office" o.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}

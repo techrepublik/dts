@@ -19,8 +19,9 @@ class Agency(models.Model):
         return self.agency_name
 
 class Office(models.Model):
-    office_name = models.CharField(max_length=50, blank = True, null= True)
+    office_name = models.CharField(max_length=50)
     office_head = models.CharField(max_length= 50)
+    office_branch = models.CharField(max_length= 50)
     office_description = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     agency = models.ForeignKey(Agency,related_name="office_agency_name",on_delete=models.CASCADE)
@@ -31,7 +32,7 @@ class Office(models.Model):
     
 class Department(models.Model):
     department_name = models.CharField(max_length=50)
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.department_name
