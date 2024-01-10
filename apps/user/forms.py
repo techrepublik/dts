@@ -142,6 +142,16 @@ class AgencyForm(forms.ModelForm):
     class Meta:
         model = Agency
         fields = ['agency_name','agency_address','agency_head', 'agency_contact','agency_email','agency_website','agency_logo1','agency_logo2',]
+        # josh Jan 10, 2024
+        widgets = {
+            'agency_name': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Agency name'}),
+            'agency_address': forms.Textarea(attrs={'rows': 3, 'class': 'form-control-sm', 'placeholder': 'Enter an address'}),
+            'agency_head': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Head'}),
+            'agency_contact': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Contact'}),
+            'agency_email': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Email'}),
+            'agency_website': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Website url (www.delta-ph.com)'}),
+        }
+
 
 class DepartmentForm(forms.ModelForm):
     class Meta:

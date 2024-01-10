@@ -9,12 +9,26 @@
         </button>
     </div>
     <div class="modal-body">
-        {{form.agency_name|as_crispy_field}}
-        {{form.agency_address|as_crispy_field}}
-        {{form.agency_head|as_crispy_field}}
-        {{form.agency_contact|as_crispy_field}}
-        {{form.agency_email|as_crispy_field}}
-        {{form.agency_website|as_crispy_field}}
+        <div class="col-md-12">
+            {{form.agency_name|as_crispy_field}}
+        </div>
+        <div class="col-md-12">
+            {{form.agency_address|as_crispy_field}}
+        </div>
+        <div class="col-md-12">
+            {{form.agency_head|as_crispy_field}}
+        </div>
+        <div class="row col-md-12">
+            <div class="col-md-4">
+                {{form.agency_contact|as_crispy_field}}
+            </div>
+            <div class="col-md-8">
+                {{form.agency_email|as_crispy_field}}
+            </div>
+        </div>
+        <div class="col-md-12">
+            {{form.agency_website|as_crispy_field}}
+        </div>
         {{form.agency_logo1|as_crispy_field}}
         {{form.agency_logo2|as_crispy_field}}
     </div>

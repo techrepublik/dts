@@ -6,7 +6,8 @@ from django.dispatch import receiver
 
 class Agency(models.Model):
     agency_name = models.CharField(max_length=50)
-    agency_address = models.CharField(max_length=50)
+    # josh Jan 10, 2024
+    agency_address = models.CharField(max_length=255)
     agency_head = models.CharField(max_length=50)
     agency_contact = models.CharField(max_length=50)
     agency_email = models.CharField(max_length=50)
