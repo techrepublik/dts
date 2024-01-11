@@ -20,3 +20,8 @@ class AttachmentForm(forms.ModelForm):
     class Meta:
         model = Attachment
         fields = ['attachment_note', 'attachment_file', 'document_id', 'urgency',]
+
+class WorkflowForm(forms.ModelForm):
+    class Meta:
+        model = Workflow
+        fields = ['office_id', 'flow_id',]

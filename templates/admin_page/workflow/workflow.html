@@ -1,0 +1,165 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Data Tables {% endblock title %}
+{% block extrastyle %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock extrastyle %}
+{% block bodyclass %} hold-transition sidebar-mini {% endblock bodyclass %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>WorkFlow</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-workflow" data-toggle="modal" data-target="#new-workflow" data-url="{% url 'add-workflow'%}">add</button>
+                        </div>
+                        
+                        <table id="workflow-list" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>Office</td>
+                                    <td>workflow Name</td>
+                                    <td>Created at</td>
+                                    <td>Action</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                  {% include "admin_page/workflow/workflow-list.html" %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="new-workflow">
+        <div class="modal-dialog">
+          <div class="modal-content">
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+</div>
+
+
+{% endblock content %}
+{% block extra_scripts %}
+<!-- DataTables  & Plugins -->
+<script src="{% static 'plugins/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+<script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+<script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.print.min.js' %}"></script>
+<script src="{% static 'plugins/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+<!-- Page specific script -->
+
+
+
+
+<script>
+
+    $(function() 
+    {
+        var loadform = function() 
+          {
+            var btn = $(this);
+            console.log(btn.attr("data-url"));
+            $.ajax
+            ({
+            url: btn.attr('data-url'),
+            type: 'get',
+            dataType: 'json',
+            beforeSend: function()
+            {
+                $("#new-workflow").modal("show");
+            },
+            success: function (data) {
+                $("#new-workflow .modal-content").html(data.html_form);
+          }
+            });
+        };
+
+        var saveForm = function() 
+        {
+          var form = $(this);
+          $.ajax
+          ({
+            url: form.attr("action"),
+            data: form.serialize(),
+            type: form.attr("method"),
+            dataType: 'json',
+            success: function (data) 
+            {
+              if (data.form_is_valid) 
+              {
+                $("#workflow-list tbody").html(data.workflow_list);
+                $("#new-workflow").modal("hide");
+              }
+              else 
+              {
+                $("#new-workflow .modal-content").html(data.html_form);
+              }
+            }
+          });
+          return false;
+        }
+
+    //add workflow
+    $(".js-add-workflow").click(loadform);
+    $("#new-workflow").on("submit",".js-workflow-create-form", saveForm);
+    //edit workflow
+    $("#workflow-list").on("click", ".js-edit-workflow", loadform);
+    $("#new-workflow").on("submit", ".js-workflow-edit-form", saveForm);
+    //delete workflow
+    $("#workflow-list").on("click", ".js-delete-workflow", loadform);
+    $("#new-workflow").on("submit", ".js-workflow-delete-form", saveForm);
+
+
+    ///////////////////////////////////////////////////////////
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+
+ 
+</script>
+{% endblock extra_scripts %}

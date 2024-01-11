@@ -1,0 +1,15 @@
+{%for w in workflow %}
+<tr>
+    <td>{{w.office_id}}</td>
+    <td>{{w.flow_id}}</td>
+    <td>{{w.created_id}}</td>
+    <td>
+        <button class="btn btn-outline-primary btn-sm js-edit-workflow" data-url="{% url "edit-workflow" w.pk %}">
+            <i class="fas fa-edit">Edit</i>
+        </button>
+        <button class="btn btn-outline-primary btn-sm js-delete-workflow" data-url="{% url "delete-workflow" w.pk %}">
+            <i class="fas fa-trash">Delete</i>
+        </button>
+    </td> 
+</tr>
+{%endfor%}
