@@ -7,7 +7,15 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return self.category_name
-    
+
+class Flow(models.Model):
+    flow_name = models.CharField(max_length=50)
+    flow_is_active = models.BooleanField()
+    created_at =  models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.flow_name
+
     
 class Document(models.Model):
     document_code = models.CharField(max_length=50)
@@ -16,6 +24,7 @@ class Document(models.Model):
     document_tags = models.CharField(max_length=50)
     document_pages = models.IntegerField()
     category_id = models.ForeignKey(Category,related_name='category_of_document',on_delete=models.CASCADE)
+    flow = models.ForeignKey(Flow,related_name='document_flow_name',on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -54,15 +63,6 @@ class Attachment(models.Model):
 
     def __str__(self) -> str:
         return self.attachment_note
-
-class Flow(models.Model):
-    flow_name = models.CharField(max_length=50)
-    flow_is_active = models.BooleanField()
-    created_at =  models.DateTimeField(auto_now_add=True)
-
-    def __str__(self) -> str:
-        return self.flow_name
-
 
 class Workflow(models.Model):
     office_id = models.ForeignKey(Office,related_name='office_workflow',on_delete=models.CASCADE)

@@ -122,7 +122,7 @@
 
     {% if request.user.office_user %}
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="{% url "officeUser-index" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "submit-new" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Submit New
         </p>

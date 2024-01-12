@@ -28,4 +28,7 @@ urlpatterns = [
     path('workflow/add_workflow/', views.add_workflow, name='add-workflow'),
     path('workflow/<int:pk>/edit/', views.edit_workflow, name='edit-workflow'),
     path('workflow/<int:pk>/delete/', views.delete_workflow, name='delete-workflow'),
+
+    #documents julius/01/12/24
+    path('submit_docs/', views.submit_new, name= 'submit-new'),
 ]

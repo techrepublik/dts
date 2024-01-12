@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.template.loader import render_to_string, get_template
 from django.http import HttpResponse, JsonResponse
-from . models import Category, Status, Flow, Workflow
-from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm
+from . models import Category, Status, Flow, Workflow, Document
+from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm, DocumentForm
 
 
 # Create your views here.
@@ -256,3 +256,31 @@ def save_status(request, form, template_name):
     context = {'form':form}
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
+
+#________________________________________________________________________________________________________
+
+
+                        #------------Document Views---------------#
+
+#________________________________________________________________________________________________________
+#01/12/2024/julius
+
+def submit_new(request): 
+    msg = None
+    success = False
+
+    if request.method == "POST":
+        form = DocumentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            msg = 'New document submitted!'
+            success = True
+
+            return redirect("tracking/submit-new.html")
+
+        else:
+            msg = 'Form is not valid'
+    else:
+        form = DocumentForm()
+
+    return render(request, "tracking/submit-new.html", {"form": form, "msg": msg, "success": success})

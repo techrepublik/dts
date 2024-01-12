@@ -1,5 +1,5 @@
 from django import forms
-from . models import  Flow,Attachment,Status, Workflow, Category
+from . models import  Flow,Attachment,Status, Workflow, Category , Document
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -25,3 +25,18 @@ class WorkflowForm(forms.ModelForm):
     class Meta:
         model = Workflow
         fields = ['office_id', 'flow_id',]
+
+class DocumentForm(forms.ModelForm):
+    class meta:
+        model = Document
+        fields = ['document_code', 'document_title', 'document_description', 'document_tags', 'document_pages','category','flow',]
+        widgets = {
+            'document_code': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Document Code'}),
+            'document_title': forms.Textarea(attrs={'rows': 3, 'class': 'form-control-sm', 'placeholder': 'Enter Document Title'}),
+            'document_description': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'Description'}),
+            'document_tags': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'tags'}),
+            'document_pages': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'number of pages'}),
+            'category': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'select category'}),
+            'flow': forms.TextInput(attrs={'class':'form-control-sm', 'placeholder': 'select flow'}),
+        }
+    
