@@ -1,5 +1,7 @@
 from django.db import models
 from apps.user.models import User, Office_User, Office, Agency
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Category(models.Model):
     category_name = models.CharField(max_length=50)
@@ -23,14 +25,54 @@ class Document(models.Model):
     document_description= models.CharField(max_length=50)
     document_tags = models.CharField(max_length=50)
     document_pages = models.IntegerField()
-    category_id = models.ForeignKey(Category,related_name='category_of_document',on_delete=models.CASCADE)
-    flow = models.ForeignKey(Flow,related_name='document_flow_name',on_delete=models.CASCADE)
+    category_id = models.ForeignKey(Category,related_name='category_of_document',on_delete=models.CASCADE, null =True, blank=True)
+    flow = models.ForeignKey(Flow,related_name='document_flow_name',on_delete=models.CASCADE,null =True, blank =True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.document_code
-    
+        template = '{0.document_code}'
+        return template.format(self)
 
+@receiver(post_save, sender= Document)
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        Tracking.objects.create(document=instance)
+    
+class Tracking(models.Model):
+    document= models.ForeignKey(Document,related_name='document_tracking',on_delete=models.CASCADE)
+    tracking_note= models.CharField(max_length=50)
+    tracking_priority= models.CharField(max_length=50)
+    # status = models.ForeignKey(Status,related_name='status_tracking',on_delete=models.CASCADE)
+    # office_user= models.ForeignKey(Office_User,related_name='office_user_tracking',on_delete=models.CASCADE)
+    # created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.document
+    
+class Forwarded(models.Model):
+    document_code= models.ForeignKey(Document,related_name='forward_document',on_delete=models.CASCADE)
+    forwarded_from = models.ForeignKey(Office, related_name = 'forward_from_office', on_delete =models.CASCADE)
+    forwarded_to = models.ForeignKey(Office, related_name = 'forward_to_office', on_delete =models.CASCADE)
+    date_time = models.DateTimeField(auto_now_add=True)
+    received = models.BooleanField(default =False)
+
+    def __str__(self):
+        template = '{0.document_code}'
+        return template.format(self)
+    
+@receiver(post_save, sender= Forwarded)
+def create_user_profile(sender, instance, created, **kwargs):
+    if instance.received == True:
+        Received.objects.create(document_code=instance)
+
+
+class Received(models.Model):
+    document_code = models.ForeignKey(Forwarded,related_name='received_doc',on_delete = models.CASCADE)
+    date_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        template = '{0.document_code}'
+        return template.format(self)
 
 class Status(models.Model):
     status_name = models.CharField(max_length=50)
@@ -39,19 +81,6 @@ class Status(models.Model):
 
     def __str__(self) -> str:
         return self.status_name
-    
-class Tracking(models.Model):
-    tracking_in = models.DateTimeField()
-    tracking_out= models.DateTimeField()
-    tracking_note= models.CharField(max_length=50)
-    tracking_priority= models.CharField(max_length=50)
-    status_id = models.ForeignKey(Status,related_name='status_tracking',on_delete=models.CASCADE)
-    document_id= models.ForeignKey(Document,related_name='document_tracking',on_delete=models.CASCADE)
-    office_user_id= models.ForeignKey(Office_User,related_name='office_user_tracking',on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self) -> str:
-        return self.tracking_in
     
 
 class Attachment(models.Model):

@@ -30,5 +30,9 @@ urlpatterns = [
     path('workflow/<int:pk>/delete/', views.delete_workflow, name='delete-workflow'),
 
     #documents julius/01/12/24
-    path('submit_docs/', views.submit_new, name= 'submit-new'),
+    path('documents/', views.documents, name= 'new-document'),
+    path('received_docs/', views.received_doc, name= 'received-doc'),
+    path('forwarded_docs/', views.forwarded_doc, name= 'forwarded-doc'),
+    path('incoming_docs/', views.incoming_doc, name= 'incoming-doc'),
+    path('confirm_received/<int:pk>/docs/', views.confirm_received, name= 'confirm-received'),
 ]

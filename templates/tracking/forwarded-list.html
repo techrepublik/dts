@@ -1,0 +1,33 @@
+{%for u in user_profile  %}
+    {% if request.user.id == u.user_id %}
+        {% for o in offices %}
+            {% if u.office_id == o.id %}
+                {% for f in forwarded  %}
+                    <tr>
+                        {% if f.forwarded_from_id == o.id %}
+                            <td>{{f.document_code}}</td>
+                            <td>{{f.forwarded_to}}</td>
+                            <td>{{f.date_time}}</td>
+                            <td>
+                                {% if f.received == False %}
+                                    Not yet
+                                {% else %}
+                                    {% for r in received  %}
+                                        {% if f.id == r.document_code.id %}
+                                            {{r.date_time}}
+                                        {% endif %}
+                                        {% endfor %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button class="btn btn-success btn-sm js-edit-department" data-url="#">
+                                    Details
+                                </button>
+                            </td> 
+                        {% endif %}
+                        </tr>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{%endfor%}

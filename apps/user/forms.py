@@ -137,7 +137,6 @@ class UserProfileForm(forms.ModelForm):
         fields = ['office','department','picture']
 
 
-
 class AgencyForm(forms.ModelForm):
     class Meta:
         model = Agency

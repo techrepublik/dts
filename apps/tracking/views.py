@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
 from django.template.loader import render_to_string, get_template
-from django.http import HttpResponse, JsonResponse
-from . models import Category, Status, Flow, Workflow, Document
-from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm, DocumentForm
+from django.http import HttpResponseRedirect, JsonResponse
+from apps.user.models import Office_User, Office, Office_User_Profile
+from . models import Category, Status, Flow, Workflow, Document, Received, Forwarded
+from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm, DocumentForm, ForwardedForm, ConfirmReceiveForm
 
 
 # Create your views here.
@@ -265,22 +266,63 @@ def save_status(request, form, template_name):
 #________________________________________________________________________________________________________
 #01/12/2024/julius
 
-def submit_new(request): 
-    msg = None
-    success = False
+def documents(request): 
+    if request.method == "POST" and 'btngenerate' in request.POST:
+           form1 = DocumentForm(request.POST)
+           if form1.is_valid():
+                  form1.save()
+                  return render(request, "tracking/document.html")
+           
+    if request.method == "POST" and 'btnsubmit' in request.POST:
+           form2 = ForwardedForm(request.POST)
+           if form2.is_valid():
+                  form2.save()
+                  return render(request, "tracking/document.html")
+    else:
+           form1 = DocumentForm
+           form2 = ForwardedForm
+    return render(request, "tracking/document.html",{'form1':form1,'form2':form2})
 
-    if request.method == "POST":
-        form = DocumentForm(request.POST)
+def received_doc(request):
+    user_profile = Office_User_Profile.objects.all()
+    offices = Office.objects.all()
+    forwarded = Forwarded.objects.all()
+    received = Received.objects.all()
+    return render(request, "tracking/received-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+def confirm_received(request,pk):
+        forwarded = get_object_or_404(Forwarded, pk=pk)
+        if(request.method == 'POST'):
+                form = ConfirmReceiveForm(request.POST, instance=forwarded)
+        else:    
+                form = ConfirmReceiveForm(instance=forwarded)
+        return save_forwarded(request, form, 'tracking/confirm-received.html')
+
+def save_forwarded(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
         if form.is_valid():
             form.save()
-            msg = 'New document submitted!'
-            success = True
-
-            return redirect("tracking/submit-new.html")
-
+            data['form_is_valid'] = True
+            status= Forwarded.objects.all()
+            data['forwarded_list'] = render_to_string('tracking/incoming-list.html', {'status':status})
         else:
-            msg = 'Form is not valid'
-    else:
-        form = DocumentForm()
+            data['form_is_valid'] = False
 
-    return render(request, "tracking/submit-new.html", {"form": form, "msg": msg, "success": success})
+    context = {'form':form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+def forwarded_doc(request):
+    user_profile = Office_User_Profile.objects.all()
+    offices = Office.objects.all()
+    forwarded = Forwarded.objects.all()
+    received = Received.objects.all()
+    return render(request, "tracking/forwarded-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+def incoming_doc(request):
+    user_profile = Office_User_Profile.objects.all()
+    offices = Office.objects.all()
+    forwarded = Forwarded.objects.all()
+    received = Received.objects.all()
+    return render(request, "tracking/incoming-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})

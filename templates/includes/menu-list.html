@@ -122,30 +122,37 @@
 
     {% if request.user.office_user %}
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="{% url "submit-new" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "new-document" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
-          Submit New
+          Documents
         </p>
       </a>
     </li>
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "incoming-doc" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Incoming
         </p>
       </a>
     </li>
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "forwarded-doc" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Forwarded
         </p>
       </a>
     </li>
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "received-doc" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Recieved
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="#" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Track Documents
         </p>
       </a>
     </li>
