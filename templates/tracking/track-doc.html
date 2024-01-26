@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdminLTE 3 | Timeline</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="{% static 'plugins/fontawesome-free/css/all.min.css' %}">
+  <!-- AdminLTE css -->
+  <link rel="stylesheet" href="{% static 'dist/css/adminlte.min.css' %}">
+</head>
+<body class="hold-transition sidebar-mini">
+<!-- Site wrapper -->
+<div class="wrapper">
+  <!-- Navbar -->
+  {% include 'includes/navigation-dark.html' %}
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  {% include 'includes/sidebar.html' %}
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Document <a href="#">document code </a></h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Timeline</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+
+        <!-- Timelime example  -->
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-3">
+                    <div>
+                        <h1>Timeline</h1>
+                    </div>
+                <!-- The time line -->
+                    <div class="timeline ">
+                    <!-- timeline time label -->
+                        <div class="time-label">
+                            <span class="bg-green">Date received</span>
+                        </div>
+                        <!-- /.timeline-label -->
+                        <!-- timeline item -->
+                        <div>
+                            <i class="fas fa-user bg-green"></i>
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header">OFFICE NAME</h3>
+                                        <div class="timeline-body">
+                                            DATE:  Recieved
+                                            <br></br>
+                                            DATE:  Forwarded
+                                            <br></br>
+                                            Forwarded to: Office
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="time-label">
+                            <span class="bg-green">Date received</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-user bg-green"></i>
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header">OFFICE NAME</h3>
+                                        <div class="timeline-body">
+                                            DATE:  Recieved
+                                            <br></br>
+                                            DATE:  Forwarded
+                                            <br></br>
+                                            Forwarded to: Office
+                                        </div>
+                                </div>
+                        </div>
+                        <div class="time-label">
+                            <span class="bg-green">Date received</span>
+                        </div>
+                        <div>
+                            <i class="fas fa-user bg-green"></i>
+                                <div class="timeline-item">
+                                    <h3 class="timeline-header">OFFICE NAME</h3>
+                                        <div class="timeline-body">
+                                            DATE:  Recieved
+                                            <br></br>
+                                            DATE:  Forwarded
+                                            <br></br>
+                                            Forwarded to: Office
+                                        </div>
+                                </div>
+                        </div>
+                        <div>
+                            <i class="fas fa-user bg-black"></i>
+                            <div class="timeline-item">
+                            </div>
+                        </div>
+                    </div>
+            <!-- /.col -->
+            </div>
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-3">
+                <div>
+                    <h1>Workflow</h1>
+                </div>
+            <!-- The time line -->
+                <div class="timeline">
+                <!-- timeline time label -->
+                <div class="time-label">
+                    <span class="bg-blue">STEP 1</span>
+                </div>
+                <!-- /.timeline-label -->
+                <!-- timeline item -->
+                <div>
+                    <i class="fas fa-user bg-yellow"></i>
+                    <div class="timeline-item">
+                    <h3 class="timeline-header">OFFICE NAME</h3>
+                    <div class="timeline-body">
+                        Department name
+                        <br></br>
+                        Office User
+                    </div>
+                    </div>
+                </div>
+                <div class="time-label">
+                    <span class="bg-blue">STEP 2</span>
+                </div>
+                <div>
+                    <i class="fas fa-user bg-yellow"></i>
+                    <div class="timeline-item">
+                    <h3 class="timeline-header">OFFICE NAME</h3>
+                    <div class="timeline-body">
+                        Department name
+                        <br></br>
+                        Office User
+                    </div>
+                    </div>
+                </div>
+                <div class="time-label">
+                    <span class="bg-blue">STEP 3</span>
+                </div>
+                <div>
+                    <i class="fas fa-user bg-yellow"></i>
+                    <div class="timeline-item">
+                    <h3 class="timeline-header">OFFICE NAME</h3>
+                    <div class="timeline-body">
+                        Department name
+                        <br></br>
+                        Office User
+                    </div>
+                    </div>
+                </div>
+                <div class="time-label">
+                    <span class="bg-blue">STEP 4</span>
+                </div>
+                <div>
+                    <i class="fas fa-user bg-yellow"></i>
+                    <div class="timeline-item">
+                    <h3 class="timeline-header">OFFICE NAME</h3>
+                    <div class="timeline-body">
+                        Department name
+                        <br></br>
+                        Office User
+                    </div>
+                    </div>
+                </div>
+                <div>
+                    <i class="fas fa-user bg-blue"></i>
+                    <div class="timeline-item">
+                        END
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+            </div>
+          <!-- /.col -->
+        </div>
+      <!-- /.timeline -->
+
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <footer class="main-footer">
+    <div class="float-right d-none d-sm-block">
+      <b>Version</b> 3.2.0
+    </div>
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+  </footer>
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+{% include 'includes/scripts.html' %}
+</body>
+</html>

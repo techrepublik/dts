@@ -326,3 +326,11 @@ def incoming_doc(request):
     forwarded = Forwarded.objects.all()
     received = Received.objects.all()
     return render(request, "tracking/incoming-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+def tracking(request):
+    
+    return render(request, "tracking/track-doc.html")
+
+def tracking_doc_list(request):
+    
+    return render(request, "tracking/track-doc-list.html")

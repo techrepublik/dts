@@ -35,4 +35,8 @@ urlpatterns = [
     path('forwarded_docs/', views.forwarded_doc, name= 'forwarded-doc'),
     path('incoming_docs/', views.incoming_doc, name= 'incoming-doc'),
     path('confirm_received/<int:pk>/docs/', views.confirm_received, name= 'confirm-received'),
+
+    #tracking
+    path('documents/tracking', views.tracking, name= 'track-doc'),
+    path('documents/track/list', views.tracking_doc_list, name= 'track-doc-list'),
 ]
