@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
+{% load humanize %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -30,7 +31,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Document <a href="#">document code </a></h1>
+            <h1>Document <a href="#">{{documents.document_code}}</a></h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -49,70 +50,85 @@
             <div class="row">
                 <div class="col-md-2">
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2.5">
                     <div>
                         <h1>Timeline</h1>
                     </div>
-                <!-- The time line -->
                     <div class="timeline ">
-                    <!-- timeline time label -->
-                        <div class="time-label">
-                            <span class="bg-green">Date received</span>
-                        </div>
-                        <!-- /.timeline-label -->
-                        <!-- timeline item -->
-                        <div>
-                            <i class="fas fa-user bg-green"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">OFFICE NAME</h3>
+                        {% for f in forwarded  %}
+                            {% if f.document_code_id == documents.id %}
+                            <!-- timeline time label -->
+                            <!-- timeline item -->
+                                <div>
+                                    <i class="fas fa-user bg-green"></i>
+                                    <div class="timeline-item">
+                                        <h3 class="timeline-header">
+                                            {% if f.forwarded_from %}
+                                                {{f.forwarded_from}}
+                                            {% else %}
+                                                By Client
+                                            {% endif %}
+                                        </h3>
                                         <div class="timeline-body">
-                                            DATE:  Recieved
-                                            <br></br>
-                                            DATE:  Forwarded
-                                            <br></br>
-                                            Forwarded to: Office
+                                            {% if f.forwarded_from %}
+                                            Forwarded to: {{f.forwarded_to}}
+                                            <br> on
+                                                {{ f.date_time }}
+                                            </br>
+                                            {% else %}
+                                                Submitted at: {{f.forwarded_to}}
+                                            </br>
+                                                {{ f.date_time}}
+                                            </br>
+                                            {% endif %}
                                         </div>
-                                </div>
-                        </div>
-                        <div class="time-label">
-                            <span class="bg-green">Date received</span>
-                        </div>
-                        <div>
-                            <i class="fas fa-user bg-green"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">OFFICE NAME</h3>
+                                    </div>
+                                </div> 
+                                <div>
+                                <br>
+                                </br>
+                                </div>                    
+                                {% for r in received  %}
+                                    {% if r.document_code_id == f.id%}
+                                        <div class="time-label">
+                                            <span class="bg-green">{{r.date_time | naturaltime }}</span>
+                                        </div>
+                                        {% comment %} {% for f2 in forwarded  %}
+                                            {% if not f2.forwarded_from_id == f.forwarded_to_id %}
+                                            <div>
+                                                <i class="fas fa-user bg-yellow"></i>
+                                                <div class="timeline-item">
+                                                    <h3 class="timeline-header">
+                                                        {{f.forwarded_to}}
+                                                    </h3>
+                                                    <div class="timeline-body">
+                                                        Document is currently in this office
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %} {% endcomment %}
+                                    {% endif %}
+                                {% endfor %}
+                    <!-- /.timeline-label -->
+                        
+                            {% comment %} {% elif f.document_code_id == documents.id and f.received == 0 %}
+                                <div class="time-label">
+                                    <span class="bg-red">Not yet received</span>
+                                </div> 
+                                <div>
+                                    <i class="fas fa-user bg-red"></i>
+                                    <div class="timeline-item">
                                         <div class="timeline-body">
-                                            DATE:  Recieved
-                                            <br></br>
-                                            DATE:  Forwarded
-                                            <br></br>
-                                            Forwarded to: Office
+                                            document is still on the way
                                         </div>
-                                </div>
-                        </div>
-                        <div class="time-label">
-                            <span class="bg-green">Date received</span>
-                        </div>
-                        <div>
-                            <i class="fas fa-user bg-green"></i>
-                                <div class="timeline-item">
-                                    <h3 class="timeline-header">OFFICE NAME</h3>
-                                        <div class="timeline-body">
-                                            DATE:  Recieved
-                                            <br></br>
-                                            DATE:  Forwarded
-                                            <br></br>
-                                            Forwarded to: Office
-                                        </div>
-                                </div>
-                        </div>
-                        <div>
-                            <i class="fas fa-user bg-black"></i>
-                            <div class="timeline-item">
-                            </div>
-                        </div>
+                                    </div>
+                                </div> {% endcomment %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
-            <!-- /.col -->
+                                        <!-- The time line -->
+                <!-- /.col -->
             </div>
             <div class="col-md-2">
             </div>

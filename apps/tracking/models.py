@@ -1,4 +1,5 @@
 from django.db import models
+import uuid,secrets
 from apps.user.models import User, Office_User, Office, Agency
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -18,9 +19,11 @@ class Flow(models.Model):
     def __str__(self) -> str:
         return self.flow_name
 
+def random():
+    return secrets.token_hex(4)
     
 class Document(models.Model):
-    document_code = models.CharField(max_length=50)
+    document_code = models.CharField(max_length=50, default=random,unique=True,)
     document_title = models.CharField(max_length=50)
     document_description= models.CharField(max_length=50)
     document_tags = models.CharField(max_length=50)
@@ -51,7 +54,7 @@ class Tracking(models.Model):
     
 class Forwarded(models.Model):
     document_code= models.ForeignKey(Document,related_name='forward_document',on_delete=models.CASCADE)
-    forwarded_from = models.ForeignKey(Office, related_name = 'forward_from_office', on_delete =models.CASCADE)
+    forwarded_from = models.ForeignKey(Office, related_name = 'forward_from_office', on_delete =models.CASCADE, null = True, blank = True)
     forwarded_to = models.ForeignKey(Office, related_name = 'forward_to_office', on_delete =models.CASCADE)
     date_time = models.DateTimeField(auto_now_add=True)
     received = models.BooleanField(default =False)
@@ -95,6 +98,7 @@ class Attachment(models.Model):
 
 class Workflow(models.Model):
     office_id = models.ForeignKey(Office,related_name='office_workflow',on_delete=models.CASCADE)
+    sub_office = models.IntegerField(null = True, blank = True)
     flow_id = models.ForeignKey(Flow,related_name='flow_workflow',on_delete=models.CASCADE)
     created_id = models.DateTimeField(auto_now_add=True)
 

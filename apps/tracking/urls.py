@@ -37,6 +37,6 @@ urlpatterns = [
     path('confirm_received/<int:pk>/docs/', views.confirm_received, name= 'confirm-received'),
 
     #tracking
-    path('documents/tracking', views.tracking, name= 'track-doc'),
+    path('document/<int:pk>/tracking', views.tracking, name= 'track-doc'),
     path('documents/track/list', views.tracking_doc_list, name= 'track-doc-list'),
 ]
