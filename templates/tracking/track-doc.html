@@ -55,6 +55,14 @@
                         <h1>Timeline</h1>
                     </div>
                     <div class="timeline ">
+                        <div>
+                            <i class="fas fa-user bg-green"></i>
+                            <div class="timeline-item">
+                                <div class="timeline-body">
+                                    Submitted by client
+                                </div>
+                            </div>
+                        </div> 
                         {% for f in forwarded  %}
                             {% if f.document_code_id == documents.id %}
                             <!-- timeline time label -->
@@ -66,19 +74,19 @@
                                             {% if f.forwarded_from %}
                                                 {{f.forwarded_from}}
                                             {% else %}
-                                                By Client
+                                                Client
                                             {% endif %}
                                         </h3>
                                         <div class="timeline-body">
                                             {% if f.forwarded_from %}
                                             Forwarded to: {{f.forwarded_to}}
-                                            <br> on
-                                                {{ f.date_time }}
+                                            <br> 
+                                                {{ f.date_time | naturaltime}}
                                             </br>
                                             {% else %}
-                                                Submitted at: {{f.forwarded_to}}
+                                                Submitted at: {{f.forwarded_to}} office
                                             </br>
-                                                {{ f.date_time}}
+                                                {{ f.date_time | naturaltime}}
                                             </br>
                                             {% endif %}
                                         </div>
@@ -91,7 +99,7 @@
                                 {% for r in received  %}
                                     {% if r.document_code_id == f.id%}
                                         <div class="time-label">
-                                            <span class="bg-green">{{r.date_time | naturaltime }}</span>
+                                            <span class="bg-green">{{r.date_time }}</span>
                                         </div>
                                         {% comment %} {% for f2 in forwarded  %}
                                             {% if not f2.forwarded_from_id == f.forwarded_to_id %}
