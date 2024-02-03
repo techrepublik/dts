@@ -122,7 +122,7 @@
 
     {% if request.user.office_user %}
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
-      <a href="{% url "new-document" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+      <a href="{% url "documents-list"%}?user={{request.user.id}}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Documents
         </p>

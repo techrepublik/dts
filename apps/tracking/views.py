@@ -336,3 +336,12 @@ def tracking(request,pk):
 def tracking_doc_list(request):
     documents = Document.objects.all()
     return render(request, "tracking/track-doc-list.html",{'documents':documents})
+
+
+#2024-02-03 Josh
+def get_all_documents(request):
+        user=request.GET.get('user')
+        print(user)
+        if not user: return
+        documents = Document.objects.filter(user=user)
+        return render(request, "tracking/documents.html", {'documents':documents})

@@ -30,6 +30,7 @@ class Document(models.Model):
     document_pages = models.IntegerField()
     category_id = models.ForeignKey(Category,related_name='category_of_document',on_delete=models.CASCADE, null =True, blank=True)
     flow = models.ForeignKey(Flow,related_name='document_flow_name',on_delete=models.CASCADE,null =True, blank =True)
+    user = models.ForeignKey(User, related_name='document_user', on_delete=models.CASCADE, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
