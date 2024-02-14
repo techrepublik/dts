@@ -1,0 +1,198 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %} dts | documents {% endblock title %}
+
+{% block extrastyle %}
+
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Tempusdominus Bootstrap 4 -->
+  <link rel="stylesheet" href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+  <!-- iCheck -->
+  <link rel="stylesheet" href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+  <!-- JQVMap -->
+  <link rel="stylesheet" href="{% static 'plugins/jqvmap/jqvmap.min.css' %}">
+  <!-- Daterange picker -->
+  <link rel="stylesheet" href="{% static 'plugins/daterangepicker/daterangepicker.css' %}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{% static 'plugins/summernote/summernote-bs4.min.css' %}">
+
+{% endblock extrastyle %}
+
+{% block bodyclass %} hold-transition sidebar-mini layout-fixed {% endblock bodyclass %}
+
+{% block content %}
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>List</h1>
+        </div>
+        {% comment %} <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">General Form</li>
+          </ol>
+        </div> {% endcomment %}
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row">
+        <!-- left column -->
+        <div class="col-md-12">
+          <!-- general form elements -->
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Documents</h3>
+              <button type="button" class="btn btn-sm btn-success float-right  js-add-document" data-toggle="modal" data-target="#new-document" data-url="{% url 'add-document'%}">Add new</button>
+            </div>
+            <!-- /.card-header -->
+            <!-- form start -->
+            {% comment %} <form action="" method=POST>
+              {% csrf_token %} {% endcomment %}
+              <div class="card-body">
+                {% comment %} {{form1.as_p}} {% endcomment %}
+                <div>
+                  <table id='document-list' class='table'>
+                    <thead>
+                      <th>Code</th>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Tags</th>
+                      <th>Pages</th>
+                      <th>Category</th>
+                      <th>Action</th>
+                    </thead>
+                    <tbody>
+                      {% include "tracking/new_document/documents-list.html" %}
+                    </tbody>
+                  </table>
+                <div>
+              </div>
+          </div>
+        </div>
+        <!--/.col (right) -->
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <div class="modal fade" id="new-document">
+    <div class="modal-dialog">
+      <div class="modal-content">
+      </div>
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <div class="modal fade" id="modalForm" tabindex="-1" role="dialog" aria-labelledby="modalFormLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_scripts %}
+  <script>
+
+    $(function() 
+    {
+        var loadform = function() 
+          {
+            var btn = $(this);
+            console.log(btn.attr("data-url"));
+            $.ajax
+            ({
+            url: btn.attr('data-url'),
+            type: 'get',
+            dataType: 'json',
+            beforeSend: function()
+            {
+                
+                //console.log($("#new-document #doc_id").html('0'));
+                $(document).find("#doc_id").text("0");
+                $("#new-document").modal("show");
+
+            },
+            success: function (data) {
+                $("#new-document .modal-content").html(data.html_form);
+          }
+            });
+        };
+
+        var saveForm = function() 
+        {
+          var form = $(this);
+          $.ajax
+          ({
+            url: form.attr("action"),
+            data: form.serialize(),
+            type: form.attr("method"),
+            dataType: 'json',
+            success: function (data) 
+            {
+              if (data.form_is_valid) 
+              {
+                $("#document-list tbody").html(data.document_list);
+                $("#modalForm").modal("hide");
+                $("#new-document").modal("hide");
+              }
+              else 
+              {
+                $("#modalForm .modal-content").html(data.html_form);
+                $("#new-document .modal-content").html(data.html_form);
+              }
+            }
+          });
+          return false;
+        }
+
+    //add document
+    $(".js-add-document").click(loadform);
+    $("#new-document").on("submit",".js-document-create-form", saveForm);
+    //edit document
+    $("#document-list").on("click", ".js-edit-document", loadform);
+    $("#new-document").on("submit", ".js-document-edit-form", saveForm);
+
+    $("#modalForm").on("submit", ".doc-forward-create-form", saveForm);
+    //delete document
+    $("#document-list").on("click", ".js-delete-document", loadform);
+    $("#new-document").on("submit", ".js-document-delete-form", saveForm);
+  });
+
+  $(document).ready(function () {
+    // Mock data for dropdown options
+    // Handle the click event for the "Details" button
+    $('.doc-forward').on('click', function () {
+      var btn = $(this);
+      console.log(btn.attr("data-url"));
+      var itemName = $(this).closest('tr').data('name');
+      console.log(itemName)
+      var pk = $(this).data('pk');
+      $.ajax
+      ({
+        url: btn.attr('data-url'),
+        type: 'get',
+        dataType: 'json',
+        beforeSend: function()
+        {
+            // Show the modal
+            $('#modalForm').modal('show');
+        },
+        success: function (data) {
+            $("#modalForm .modal-content").html(data.html_form);
+            $('#modalItemName').text(itemName);
+            $('#document-code').val(pk);
+        }
+      });
+    });
+  });
+  
+  </script>
+
+{% endblock extra_scripts %}
+

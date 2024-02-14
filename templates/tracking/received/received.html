@@ -15,7 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Documents</h1>
+            <h1>WorkFlow</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -31,23 +31,22 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                  
+                    <div class="card">
                         <div class="card-header">
-                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-documents" data-toggle="modal" data-target="#new-documents" data-url="#">Forward Documents</button>
+                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-received" data-toggle="modal" data-target="#new-received" data-url="#">add</button>
                         </div>
                         
-                        <table id="documents-list" class="table table-bordered table-hover">
+                        <table id="received-list" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td>document_code</td>
-                                    <td>Forwarded to</td>
-                                    <td>Forwarded on</td>
-                                    <td>Received</td>
+                                    <td>Document Code</td>
+                                    <td>Received from</td>
+                                    <td>Creat</td>
                                     <td>Action</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                  {% include "tracking/forwarded-list.html" %}
+                                  {% include "tracking/received/received-list.html" %}
                             </tbody>
                         </table>
                     </div>
@@ -55,7 +54,7 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="new-documents">
+    <div class="modal fade" id="new-received">
         <div class="modal-dialog">
           <div class="modal-content">
           </div>
@@ -101,10 +100,10 @@
             dataType: 'json',
             beforeSend: function()
             {
-                $("#new-documents").modal("show");
+                $("#new-received").modal("show");
             },
             success: function (data) {
-                $("#new-documents .modal-content").html(data.html_form);
+                $("#new-received .modal-content").html(data.html_form);
           }
             });
         };
@@ -122,43 +121,53 @@
             {
               if (data.form_is_valid) 
               {
-                $("#documents-list tbody").html(data.documents_list);
-                $("#new-documents").modal("hide");
+                $("#received-list tbody").html(data.received_list);
+                $("#new-received").modal("hide");
               }
               else 
               {
-                $("#new-documents .modal-content").html(data.html_form);
+                $("#new-received .modal-content").html(data.html_form);
               }
             }
           });
           return false;
         }
-
-    //add documents
-    $(".js-add-documents").click(loadform);
-    $("#new-documents").on("submit",".js-documents-create-form", saveForm);
-    //edit documents
-    $("#documents-list").on("click", ".js-edit-documents", loadform);
-    $("#new-documents").on("submit", ".js-documents-edit-form", saveForm);
-    //delete documents
-    $("#documents-list").on("click", ".js-delete-documents", loadform);
-    $("#new-documents").on("submit", ".js-documents-delete-form", saveForm);
-
-
-    ///////////////////////////////////////////////////////////
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
+    //add received
+    $(".js-add-received").click(loadform);
+    $("#new-received").on("submit",".js-received-create-form", saveForm);
+    //edit received
+    $("#received-list").on("click", ".js-edit-received", loadform);
+    $("#new-received").on("submit", ".js-received-edit-form", saveForm);
+    //delete received
+    $("#received-list").on("click", ".js-delete-received", loadform);
+    $("#new-received").on("submit", ".js-received-delete-form", saveForm);
+  });
+    $(document).ready(function () {
+      // Mock data for dropdown options
+      // Handle the click event for the "Details" button
+      $('.doc-forward').on('click', function () {
+        var btn = $(this);
+        console.log(btn.attr("data-url"));
+        var itemName = $(this).closest('tr').data('name');
+        console.log(itemName)
+        var pk = $(this).data('pk');
+        $.ajax
+        ({
+          url: btn.attr('data-url'),
+          type: 'get',
+          dataType: 'json',
+          beforeSend: function()
+          {
+              // Show the modal
+              $('#modalForm').modal('show');
+          },
+          success: function (data) {
+              $("#modalForm .modal-content").html(data.html_form);
+              $('#modalItemName').text(itemName);
+              $('#document-code').val(pk);
+          }
+        });
+      });
   });
 
  

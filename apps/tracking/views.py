@@ -2,8 +2,10 @@ from django.shortcuts import render,redirect, get_object_or_404
 from django.template.loader import render_to_string, get_template
 from django.http import HttpResponseRedirect, JsonResponse
 from apps.user.models import Office_User, Office, Office_User_Profile
-from . models import Category, Status, Flow, Workflow, Document, Received, Forwarded
-from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm, DocumentForm, ForwardedForm, ConfirmReceiveForm
+from . models import Category, Status, Flow, Workflow, Document, Received, Forwarded, Model1, Model2
+from . forms import CategoryForm,FlowForm,StatusForm, WorkflowForm, DocumentForm, ForwardedForm, ConfirmReceivedForm, Model2Form, SearchForm
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 
 # Create your views here.
@@ -266,46 +268,47 @@ def save_status(request, form, template_name):
 #________________________________________________________________________________________________________
 #01/12/2024/julius
 
-def documents(request): 
-    if request.method == "POST" and 'btngenerate' in request.POST:
-           form1 = DocumentForm(request.POST)
-           if form1.is_valid():
-                  form1.save()
-                  return render(request, "tracking/document.html")
-           
-    if request.method == "POST" and 'btnsubmit' in request.POST:
-           form2 = ForwardedForm(request.POST)
-           if form2.is_valid():
-                  form2.save()
-                  return render(request, "tracking/document.html")
-    else:
-           form1 = DocumentForm
-           form2 = ForwardedForm
-    return render(request, "tracking/document.html",{'form1':form1,'form2':form2})
 
-def received_doc(request):
-    user_profile = Office_User_Profile.objects.all()
-    offices = Office.objects.all()
-    forwarded = Forwarded.objects.all()
-    received = Received.objects.all()
-    return render(request, "tracking/received-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+#New Documents 2024-02-03 Josh
+def get_all_documents(request):
+        user=request.GET.get('user')
+        print(user)
+        if not user: return
+        documents = Document.objects.filter(user=user)
+        return render(request, "tracking/new_document/documents.html", {'documents':documents})
 
-def confirm_received(request,pk):
-        forwarded = get_object_or_404(Forwarded, pk=pk)
+def add_document(request):
         if(request.method == 'POST'):
-                form = ConfirmReceiveForm(request.POST, instance=forwarded)
+                form = DocumentForm(request.POST,)
         else:    
-                form = ConfirmReceiveForm(instance=forwarded)
-        return save_forwarded(request, form, 'tracking/confirm-received.html')
+                form = DocumentForm()
 
-def save_forwarded(request, form, template_name):
+        return save_document(request, form, 'tracking/new_document/add-document.html')
+
+
+
+def doc_new_forward(request):
+        if(request.method == 'POST'):
+                form = ForwardedForm(request.POST,)
+        else:    
+                form = ForwardedForm()
+
+        return save_forwaded(request, form, 'tracking/new_document/doc_forward.html')
+
+def save_forwaded(request, form, template_name):
     data = dict()
+    print("1")
     if request.method == 'POST':
+        print("2")
         if form.is_valid():
-            form.save()
-            data['form_is_valid'] = True
-            status= Forwarded.objects.all()
-            data['forwarded_list'] = render_to_string('tracking/incoming-list.html', {'status':status})
+            instance = form.save(commit=False)
+            user = Office_User_Profile.objects.all()
+            for u in user:
+                   if u.user_id == request.user.id:
+                        instance.forwarded_from = u.office
+                        form.save()
+                        data['form_is_valid'] = True
+                        data['document_list'] = render_to_string('tracking/new_document/documents-list.html')
         else:
             data['form_is_valid'] = False
 
@@ -313,35 +316,140 @@ def save_forwarded(request, form, template_name):
     data['html_form'] = render_to_string(template_name, context, request=request)
     return JsonResponse(data)
 
+@login_required
+def save_document(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.user = request.user
+            form.save()
+            data['form_is_valid'] = True
+            documents= Document.objects.all()
+            data['document_list'] = render_to_string('tracking/new_document/documents-list.html', {'documents':documents})
+        else:
+            data['form_is_valid'] = False
+
+    context = {'form':form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+#_____________________________________________________________________________________________________________
+
+#incoming
+
+#_____________________________________________________________________________________________________________
+
+def incoming(request):
+    user_profile = Office_User_Profile.objects.all()
+    offices = Office.objects.all()
+    forwarded = Forwarded.objects.all()
+    received = Received.objects.all()
+    return render(request, "tracking/incoming/incoming.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+def confirm_received(request,pk):
+        forwarded = get_object_or_404(Forwarded, pk=pk)
+        if(request.method == 'POST'):
+                form = ConfirmReceivedForm(request.POST, instance=forwarded)
+        else:    
+                form = ConfirmReceivedForm(instance=forwarded)
+        return save_received(request, form, "tracking/incoming/received-doc.html")
+
+def save_received(request, form, template_name):
+    data = dict()
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.received = True
+            form.save()
+            data['form_is_valid'] = True
+            forwarded= Forwarded.objects.all()
+            offices = Office.objects.all()
+            user_profile = Office_User_Profile.objects.all()
+            data['incoming_list'] = render_to_string("tracking/incoming/incoming-list.html", {'offices':offices,'forwarded':forwarded,'user_profile':user_profile})
+        else:
+            data['form_is_valid'] = False
+
+    context = {'form':form}
+    data['html_form'] = render_to_string(template_name, context, request=request)
+    return JsonResponse(data)
+
+
+#_________________________________________________________________________________________________________________
+    
+#Received
+    
+#_________________________________________________________________________________________________________________
+    
+
+def received_doc(request):
+    user_profile = Office_User_Profile.objects.all()
+    offices = Office.objects.all()
+    forwarded = Forwarded.objects.all()
+    received = Received.objects.all()
+    return render(request, "tracking/received/received.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+
+#_________________________________________________________________________________________________________________
+
+#forwarded
+
+#_________________________________________________________________________________________________________________
+
+
 def forwarded_doc(request):
     user_profile = Office_User_Profile.objects.all()
     offices = Office.objects.all()
     forwarded = Forwarded.objects.all()
     received = Received.objects.all()
-    return render(request, "tracking/forwarded-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+    return render(request, "tracking/forwarded/forwarded-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
 
-def incoming_doc(request):
-    user_profile = Office_User_Profile.objects.all()
-    offices = Office.objects.all()
-    forwarded = Forwarded.objects.all()
-    received = Received.objects.all()
-    return render(request, "tracking/incoming-doc.html",{'offices':offices,'forwarded':forwarded,'received':received,'user_profile':user_profile})
+
+
+#______________________________________________________________________________________________________________________________
+
+#track
+
+#______________________________________________________________________________________________________________________________
 
 def tracking(request,pk):
     forwarded =Forwarded.objects.all()
     received =Received.objects.all()
     documents = Document.objects.get(id=pk)
-    return render(request, "tracking/track-doc.html",{'documents':documents,'forwarded':forwarded, 'received':received})
+    return render(request, "tracking/track/track-doc.html",{'documents':documents,'forwarded':forwarded, 'received':received})
 
 def tracking_doc_list(request):
     documents = Document.objects.all()
-    return render(request, "tracking/track-doc-list.html",{'documents':documents})
+    return render(request, "tracking/track/track-doc-list.html",{'documents':documents})
 
+########################################################################################################
 
-#2024-02-03 Josh
-def get_all_documents(request):
-        user=request.GET.get('user')
-        print(user)
-        if not user: return
-        documents = Document.objects.filter(user=user)
-        return render(request, "tracking/documents.html", {'documents':documents})
+def aaa(request):
+      model1_instances = Model1.objects.all()
+      return render(request,"try/try_table.html",{'model1_instances':model1_instances} )
+
+def get_model1_data(request, pk):
+    instance = get_object_or_404(Model1, pk=pk)
+    data = {
+        'pk': instance.pk,
+        'name': instance.name,  
+    }
+    return JsonResponse(data)
+
+def create_model2(request):
+    if request.method == 'POST':
+        form = Model2Form(request.POST)
+        if form.is_valid():
+            form.save()
+            # Handle form submission
+            return JsonResponse({'success': True})
+        return render(request,"try/try_table.html",{'form':form})
+    return JsonResponse({'success': False})
+
+def search(request):
+    if 'query' in request.GET:
+        query = request.GET['query']
+        results = Document.objects.filter(Q(document_title__icontains=query) | Q(document_code__icontains=query))
+    else:
+        results = []
+    return render(request, 'search/search.html', {'results': results})

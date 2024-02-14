@@ -6,21 +6,23 @@
                 <tr>
                     {% if f.forwarded_to_id == o.id and f.received == False %}
                         <td>{{f.document_code}}</td>
-                        <td>{{f.forwarded_from}}</td>
+                        <td>
+                            {{f.forwarded_from}}
+                        </td>
                         <td>{{f.date_time}}</td>
                         <td>
                             <button class="btn btn-primary btn-sm js-edit-forwarded" data-url="#" >
                                 Details
                             </button>
-                            <button class="btn btn-danger btn-sm js-edit-forwarded" data-url="{% url "confirm-received" f.pk %}" >
+                            <button class="btn btn-danger btn-sm js-edit-forwarded" data-url="#" >
                                 Reject
                             </button>
-                            <button class="btn btn-success btn-sm js-edit-forwarded" data-url="{% url "confirm-received" f.pk %}" >
+                            <button class="btn btn-success btn-sm js-edit-incoming" data-url="{% url "confirm-received" f.pk%}" >
                                 Receive
                             </button>
                         </td> 
                     {% endif %}
-                    </tr>
+                </tr>
             {% endfor %}
         {% endif %}
     {% endfor %}

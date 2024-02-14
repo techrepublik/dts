@@ -1,0 +1,116 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block title %} Data Tables {% endblock title %}
+{% block extrastyle %}
+<!-- DataTables -->
+<link rel="stylesheet" href="{% static 'plugins/datatables-bs4/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-responsive/css/responsive.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'plugins/datatables-buttons/css/buttons.bootstrap4.min.css' %}">
+{% endblock extrastyle %}
+{% block bodyclass %} hold-transition sidebar-mini {% endblock bodyclass %}
+{% block content %}
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1>Documents</h1>
+          </div>
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">DataTables</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+    <section>
+      <form method="post" action="" id="model2-form">
+        {% csrf_token %}
+        <div>
+          {{ form.as_p }}
+        </div>
+        <input type="hidden" id="model1-fk" name="model1_fk" value="">
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-forwarded" data-toggle="modal" data-target="#new-forwarded" data-url="{% url "add-forward" %}">Forward forwarded</button>
+                        </div>
+                        
+                        <table id="forwarded-list" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <td>name</td>
+                                    <td>btn</td>
+                                   
+                                </tr>
+                            </thead>
+                            <tbody>
+                                  {% include "try/list.html" %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="modal fade" id="modal-form" tabindex="-1" role="dialog" aria-labelledby="modalFormLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div>
+            name
+          </div>
+          <form method="post" action="" id="model2-form">
+            {% csrf_token %}
+            <div>
+              {{ form.as_p }}
+            </div>
+            <input type="hidden" id="model1-fk" name="model1_fk" value="">
+            <button type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+{% block extra_scripts %}
+<!-- Page specific script -->
+
+<script>
+  document.querySelectorAll('.modal-trigger').forEach(button => {
+    button.addEventListener('click', function() {
+      const pk = this.dataset.pk;
+      fetch(`/get-model1-data/${pk}/`)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Fetched data:', data);
+          const field1Input = document.getElementById('id_field1');
+          const field2Input = document.getElementById('id_field2');
+          const model1FkInput = document.getElementById('model1-fk');
+          console.log('Field1 input:', field1Input);
+          console.log('Field2 input:', field2Input);
+          console.log('Model1 FK input:', model1FkInput);
+          // Set input values if elements are found
+          if (field1Input && field2Input && model1FkInput) {
+            field1Input.value = data.field1;
+            field2Input.value = data.field2;
+            model1FkInput.value = data.pk;
+            $('#modal-form').modal('show'); // Show the modal
+          } else {
+            console.log('One or more input elements not found.');
+            $('#modal-form').modal('show');
+          }
+        });
+    });
+  });
+</script>
+{% endblock extra_scripts %}

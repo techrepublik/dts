@@ -1,0 +1,26 @@
+{% load crispy_forms_tags %}
+
+<form method="post" action="{% url 'doc-new-forward' %}" class="doc-forward-create-form">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h4 class="modal-title">Forward Document </h4>
+    </div>
+    <div class="modal-body">
+        <p id="modalItemName"></p>
+        <div class="col-md-12">
+            {{ form.document_code|as_crispy_field }}
+        </div>
+        <div class="col-md-12">
+            {{ form.forwarded_to|as_crispy_field }}
+        </div>
+        <div class="col-md-12">
+            {{ form.note|as_crispy_field }}
+        </div>
+        <!-- Field to populate from table -->
+
+    </div>
+    <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary">Forward</button>
+    </div>
+</form>

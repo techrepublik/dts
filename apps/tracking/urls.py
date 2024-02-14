@@ -31,15 +31,33 @@ urlpatterns = [
     path('workflow/<int:pk>/delete/', views.delete_workflow, name='delete-workflow'),
 
     #documents julius/01/12/24
-    path('documents1/', views.documents, name= 'new-document'), #edited 2024-02-03 josh
+
+    #received
     path('received_docs/', views.received_doc, name= 'received-doc'),
+
+    #forwarded
     path('forwarded_docs/', views.forwarded_doc, name= 'forwarded-doc'),
-    path('incoming_docs/', views.incoming_doc, name= 'incoming-doc'),
-    path('confirm_received/<int:pk>/docs/', views.confirm_received, name= 'confirm-received'),
-    #2024-02-03 Josh
+
+    #incoming
+    path('incoming_docs/', views.incoming, name= 'incoming-doc'),
+    path('incoming/<int:pk>/reaceived/', views.confirm_received, name='confirm-received'),
+
+    #new documents2024-02-03 Josh
     path('documents/', views.get_all_documents, name='documents-list'),
+    path('documents/add_document/', views.add_document, name='add-document'),
+    path('new_doc/forward/', views.doc_new_forward, name='doc-new-forward'),
 
     #tracking
     path('document/<int:pk>/tracking', views.tracking, name= 'track-doc'),
     path('documents/track/list', views.tracking_doc_list, name= 'track-doc-list'),
+
+    #search
+    path('search/', views.search, name='search'),
+
+
+    ####################################################################################
+
+    path('get-model1-data/<int:pk>/', views.get_model1_data, name='get_model1_data'),
+    path('create-model2/', views.create_model2, name='create_model2'),
+    path('aa/', views.aaa, name='aaa'),
 ]

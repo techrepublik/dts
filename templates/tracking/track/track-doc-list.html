@@ -54,17 +54,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% comment %} <tr>
-                                    <td>123456789</td>
-                                    <td>Application Letter</td>
-                                    <td>Julius Calopez Ugay</td>
-                                    <td>
-                                        <button class="btn btn-outline-primary btn-sm" >
-                                            <a  href = "{% url "track-doc" %}">Track</a>
-                                        </button>
-                                    </td>
-                                    
-                                </tr> {% endcomment %}
                                 {% for d in documents  %}
                                     <tr>
                                         <td>{{d.document_code}}</td>
@@ -109,6 +98,20 @@
 
 
 <script>
-
+    $(function () {
+        $("#forwarded-list").DataTable({
+          "responsive": true, "lengthChange": false, "autoWidth": false,
+          "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+        }).buttons().container().appendTo('#forwarded-list_wrapper .col-md-6:eq(0)');
+        $('#').DataTable({
+          "paging": true,
+          "lengthChange": false,
+          "searching": false,
+          "ordering": true,
+          "info": true,
+          "autoWidth": false,
+          "responsive": true,
+        });
+      });
 </script>
 {% endblock extra_scripts %}

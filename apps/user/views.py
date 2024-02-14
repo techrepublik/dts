@@ -109,7 +109,7 @@ def agencies(request):
 
 def add_agency(request):
         if(request.method == 'POST'):
-                form = AgencyForm(request.POST)
+                form = AgencyForm(request.POST, request.FILES)
         else:    
                 form = AgencyForm()
 
@@ -119,7 +119,7 @@ def add_agency(request):
 def edit_agency(request,pk):
         agency = get_object_or_404(Agency, pk=pk)
         if(request.method == 'POST'):
-                form = AgencyForm(request.POST, instance=agency)
+                form = AgencyForm(request.POST, request.FILES, instance=agency)
         else:    
                 form = AgencyForm(instance=agency)
         return save_agency(request, form, 'admin_page/agency/edit-agency.html')
@@ -144,6 +144,7 @@ def delete_agency(request,pk):
 def save_agency(request, form, template_name):
     data = dict()
     if request.method == 'POST':
+        form = AgencyForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             data['form_is_valid'] = True

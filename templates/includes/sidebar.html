@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <!-- SidebarSearch Form -->
+    {% if request.user.is_authenticated and not request.user.office_user %}{% endif %}
     <div class="form-inline">
       <div class="input-group" data-widget="sidebar-search">
         <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">

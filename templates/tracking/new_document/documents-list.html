@@ -1,0 +1,11 @@
+{%for d in documents %}
+<tr data-name="">
+    <td ><a href = "#">{{d.document_code}}</a></td>
+    <td>{{d.document_title}}</td>
+    <td>{{d.document_description}}</td>
+    <td>{{d.document_tags}}</td>
+    <td>{{d.document_pages}}</td>
+    <td>{{d.category_id}}</td>
+    <td><button class="btn btn-sm btn-success doc-forward" data-pk="{{ d.id }}" data-toggle="modal" data-target="#modalForm" data-url="{% url 'doc-new-forward'%}" >Forward</button></td>
+</tr>
+{%endfor%}

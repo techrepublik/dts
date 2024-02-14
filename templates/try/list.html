@@ -1,0 +1,10 @@
+<table>
+  {% for instance in model1_instances %}
+  <tr>
+    <td>{{ instance.name }}</td>
+    <td><button class="modal-trigger" data-pk="{{ instance.pk }}">Open Modal</button></td>
+  </tr>
+  {% endfor %}
+</table>
+  
+  <!-- Modal Form for Model2 -->

@@ -121,6 +121,14 @@
     {% endif %}
 
     {% if request.user.office_user %}
+
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "search"%}?user={{request.user.id}}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Search
+        </p>
+      </a>
+    </li>
     <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
       <a href="{% url "documents-list"%}?user={{request.user.id}}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
@@ -153,6 +161,13 @@
       <a href="{% url "track-doc-list" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
         <p>
           Track Documents
+        </p>
+      </a>
+    </li>
+    <li class="nav-item {% if 'dashboard' in parent %} menu-open {% endif %}">
+      <a href="{% url "aaa" %}" class="nav-link {% if 'dashboard' in parent %} active {% endif %}">
+        <p>
+          Try
         </p>
       </a>
     </li>

@@ -15,7 +15,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Documents</h1>
+            <h1>Agencies</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -33,20 +33,20 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-forwarded" data-toggle="modal" data-target="#new-forwarded" data-url="#">Search</button>
+                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-agency" data-toggle="modal" data-target="#new-agency" data-url="{% url 'add-agency'%}">add</button>
                         </div>
                         
-                        <table id="forwarded-list" class="table table-bordered table-hover">
+                        <table id="incoming-list" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <td>Document code</td>
-                                    <td>From</td>
-                                    <td>Date forwarded</td>
+                                    <td>Document Code</td>
+                                    <td>forwarded From</td>
+                                    <td>Date</td>
                                     <td>Action</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% include "tracking/incoming-list.html" %}
+                                  {% include "tracking/incoming/incoming-list.html" %}
                             </tbody>
                         </table>
                     </div>
@@ -54,14 +54,14 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="new-forwarded">
+    <div class="modal fade" id="new-incoming">
         <div class="modal-dialog">
           <div class="modal-content">
           </div>
           <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
-      </div>
+    </div>
 </div>
 
 
@@ -100,10 +100,10 @@
             dataType: 'json',
             beforeSend: function()
             {
-                $("#new-forwarded").modal("show");
+                $("#new-incoming").modal("show");
             },
             success: function (data) {
-                $("#new-forwarded .modal-content").html(data.html_form);
+                $("#new-incoming .modal-content").html(data.html_form);
           }
             });
         };
@@ -121,43 +121,27 @@
             {
               if (data.form_is_valid) 
               {
-                $("#forwarded-list tbody").html(data.forwarded_list);
-                $("#new-forwarded").modal("hide");
+                $("#incoming-list tbody").html(data.incoming_list);
+                $("#new-incoming").modal("hide");
               }
               else 
               {
-                $("#new-forwarded .modal-content").html(data.html_form);
+                $("#new-incoming .modal-content").html(data.html_form);
               }
             }
           });
           return false;
         }
 
-    //add forwarded
-    $(".js-add-forwarded").click(loadform);
-    $("#new-forwarded").on("submit",".js-forwarded-create-form", saveForm);
-    //edit forwarded
-    $("#forwarded-list").on("click", ".js-edit-forwarded", loadform);
-    $("#new-forwarded").on("submit", ".js-forwarded-edit-form", saveForm);
-    //delete forwarded
-    $("#forwarded-list").on("click", ".js-delete-forwarded", loadform);
-    $("#new-forwarded").on("submit", ".js-forwarded-delete-form", saveForm);
-
-
-    ///////////////////////////////////////////////////////////
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
+    //add incoming
+    $(".js-add-incoming").click(loadform);
+    $("#new-incoming").on("submit",".js-incoming-create-form", saveForm);
+    //edit incoming
+    $("#incoming-list").on("click", ".js-edit-incoming", loadform);
+    $("#new-incoming").on("submit", ".js-incoming-edit-form", saveForm);
+    //delete incoming
+    $("#incoming-list").on("click", ".js-delete-incoming", loadform);
+    $("#new-incoming").on("submit", ".js-incoming-delete-form", saveForm);
   });
 
  

@@ -54,7 +54,14 @@
     {% endblock control_sidebar %}
 
   </div>
-  
+  <div id="modal-form" class="modal" style="display: none;">
+    <form id="model2-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="hidden" id="model1-fk" name="model1_fk" value="">
+      <button type="submit">Submit</button>
+    </form>
+</div>
   {% include 'includes/scripts.html' %}
   {% block extra_scripts %}{% endblock extra_scripts %}
 

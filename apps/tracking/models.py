@@ -55,10 +55,12 @@ class Tracking(models.Model):
     
 class Forwarded(models.Model):
     document_code= models.ForeignKey(Document,related_name='forward_document',on_delete=models.CASCADE)
+    note = models.CharField(max_length=500, null =True, blank =True)
     forwarded_from = models.ForeignKey(Office, related_name = 'forward_from_office', on_delete =models.CASCADE, null = True, blank = True)
     forwarded_to = models.ForeignKey(Office, related_name = 'forward_to_office', on_delete =models.CASCADE)
-    date_time = models.DateTimeField(auto_now_add=True)
     received = models.BooleanField(default =False)
+    date_time = models.DateTimeField(auto_now_add=True)
+    
 
     def __str__(self):
         template = '{0.document_code}'
@@ -67,11 +69,13 @@ class Forwarded(models.Model):
 @receiver(post_save, sender= Forwarded)
 def create_user_profile(sender, instance, created, **kwargs):
     if instance.received == True:
-        Received.objects.create(document_code=instance)
+        Received.objects.create(document_code=instance, received_from = instance.forwarded_from, office = instance.forwarded_to)
 
 
 class Received(models.Model):
     document_code = models.ForeignKey(Forwarded,related_name='received_doc',on_delete = models.CASCADE)
+    received_from = models.ForeignKey(Office, related_name = 'received_office',on_delete = models.CASCADE, null = True, blank = True)
+    office = models.ForeignKey(Office, related_name = 'current_office', on_delete = models.CASCADE, null = True, blank = True )
     date_time = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -105,3 +109,18 @@ class Workflow(models.Model):
 
     def __str__(self) -> str:
         return self.office_id
+    
+
+
+################################################################################
+########################################################################
+
+
+class Model1(models.Model):
+    name = models.CharField(max_length=100)
+
+
+class Model2(models.Model):
+    field1 = models.CharField(max_length=100,blank = True, null = True)
+    field2 = models.CharField(max_length=100,blank = True, null =True)
+    model1_fk = models.ForeignKey(Model1, on_delete=models.CASCADE)

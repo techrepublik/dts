@@ -31,22 +31,23 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <div class="card">
+                  
                         <div class="card-header">
-                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-documents" data-toggle="modal" data-target="#new-documents" data-url="#">Forward Documents</button>
+                            <button type="button" class="btn btn-sm btn-primary float-right  js-add-forwarded" data-toggle="modal" data-target="#new-forwarded" data-url="#">Forward forwarded</button>
                         </div>
                         
-                        <table id="documents-list" class="table table-bordered table-hover">
+                        <table id="forwarded-list" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <td>document_code</td>
-                                    <td>From</td>
-                                    <td>Received date</td>
+                                    <td>Forwarded to</td>
+                                    <td>Forwarded on</td>
+                                    <td>Received</td>
                                     <td>Action</td>
                                 </tr>
                             </thead>
                             <tbody>
-                                  {% include "tracking/received-list.html" %}
+                                  {% include "tracking/forwarded/forwarded-list.html" %}
                             </tbody>
                         </table>
                     </div>
@@ -54,7 +55,7 @@
             </div>
         </div>
     </section>
-    <div class="modal fade" id="new-documents">
+    <div class="modal fade" id="new-forwarded">
         <div class="modal-dialog">
           <div class="modal-content">
           </div>
@@ -100,10 +101,10 @@
             dataType: 'json',
             beforeSend: function()
             {
-                $("#new-documents").modal("show");
+                $("#new-forwarded").modal("show");
             },
             success: function (data) {
-                $("#new-documents .modal-content").html(data.html_form);
+                $("#new-forwarded .modal-content").html(data.html_form);
           }
             });
         };
@@ -121,27 +122,27 @@
             {
               if (data.form_is_valid) 
               {
-                $("#documents-list tbody").html(data.documents_list);
-                $("#new-documents").modal("hide");
+                $("#forwarded-list tbody").html(data.forwarded_list);
+                $("#new-forwarded").modal("hide");
               }
               else 
               {
-                $("#new-documents .modal-content").html(data.html_form);
+                $("#new-forwarded .modal-content").html(data.html_form);
               }
             }
           });
           return false;
         }
 
-    //add documents
-    $(".js-add-documents").click(loadform);
-    $("#new-documents").on("submit",".js-documents-create-form", saveForm);
-    //edit documents
-    $("#documents-list").on("click", ".js-edit-documents", loadform);
-    $("#new-documents").on("submit", ".js-documents-edit-form", saveForm);
-    //delete documents
-    $("#documents-list").on("click", ".js-delete-documents", loadform);
-    $("#new-documents").on("submit", ".js-documents-delete-form", saveForm);
+    //add forwarded
+    $(".js-add-forwarded").click(loadform);
+    $("#new-forwarded").on("submit",".js-forwrded-create-form", saveForm);
+    //edit forwarded
+    $("#forwarded-list").on("click", ".js-edit-forwarded", loadform);
+    $("#new-forwarded").on("submit", ".js-forwarded-edit-form", saveForm);
+    //delete forwarded
+    $("#forwarded-list").on("click", ".js-delete-forwarded", loadform);
+    $("#new-forwarded").on("submit", ".js-forwarded-delete-form", saveForm);
 
 
     ///////////////////////////////////////////////////////////
