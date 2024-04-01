@@ -1,3 +1,9 @@
+https://github.com/techrepublik/dts/blob/main/static/dist/img/logo/logo1.jpg
+
+
+
+
+
 # [Django AdminLTE](https://appseed.us/product/adminlte/django/)
 
 Open-source **Django** project crafted on top of **[AdminLTE](https://appseed.us/product/adminlte/django/)**, an open-source and iconic `Bootstrap` design.
